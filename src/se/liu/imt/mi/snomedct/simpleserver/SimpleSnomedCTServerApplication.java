@@ -62,7 +62,8 @@ public class SimpleSnomedCTServerApplication extends Application {
 	@Override
 	public Restlet createRoot() {
 		Router router = new Router(getContext());
-		router.attach("/e/{expression}", ExpressionResource.class);
+		router.attach("/expression", ExpressionResource.class);
+		router.attach("/ontology", OntologyResource.class);
 
 		return router;
 	}
