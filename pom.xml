@@ -51,5 +51,10 @@
 			<artifactId>owlapi-api</artifactId>
 			<version>${owlapi.version}</version>
 		</dependency>
+				<dependency>
+			<groupId>org.semanticweb.elk</groupId>
+			<artifactId>elk-owlapi</artifactId>
+			<version>0.4.1</version>
+		</dependency>
   </dependencies>
 </project>

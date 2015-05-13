@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.coode.owlapi.turtle.TurtleOntologyFormat;
@@ -48,6 +49,10 @@ public class ExpressionResource extends ServerResource {
 		
 		Form form = new Form(entity); 
 		String expression = form.getFirstValue("expression");
+		if(expression == null) {
+			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			return "";
+		}
 
 		OWLAxiom axiom = null;
 		try {
@@ -59,7 +64,7 @@ public class ExpressionResource extends ServerResource {
 
 		IRI iri = null;
 		if (axiom.getAxiomType() == AxiomType.SUBCLASS_OF) {
-			iri = ((OWLSubClassOfAxiom) axiom).getSuperClass().asOWLClass()
+			iri = ((OWLSubClassOfAxiom) axiom).getSubClass().asOWLClass()
 					.getIRI();
 		} else if (axiom.getAxiomType() == AxiomType.EQUIVALENT_CLASSES) {
 			List<OWLClassExpression> classExpressionList = ((OWLEquivalentClassesAxiom) axiom)
@@ -87,8 +92,9 @@ public class ExpressionResource extends ServerResource {
 
 		boolean found = false;
 		for(OWLAxiom axiom : ontology.getAxioms()) {
-			if(axiom.containsEntityInSignature(owlClass)) {
-				ontology.getOWLOntologyManager().removeAxiom(ontology, axiom);
+			Set<OWLClass> classes = axiom.getClassesInSignature();
+			if(classes.contains(owlClass)) {
+				manager.removeAxiom(ontology, axiom);
 				found = true;
 				break;
 			}

@@ -64,6 +64,8 @@ public class SimpleSnomedCTServerApplication extends Application {
 		Router router = new Router(getContext());
 		router.attach("/expression", ExpressionResource.class);
 		router.attach("/ontology", OntologyResource.class);
+		router.attach("/inferredontology", InferredOntologyResource.class);
+
 
 		return router;
 	}
